@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "data-for-good"
+version = "0.1.0"
+description = ""
+authors = ["Marie Skoczylas  <mb.skoczylas@gmail.com>"]
+readme = "README.md"
+packages = [{include = "data_for_good"}]
+
+[tool.poetry.dependencies]
+python = "3.9.12"
+matplotlib = "^3.5.3"
+numpy = "^1.23.3"
+sklearn = "^0.0"
+pandas = "^1.4.4"
+seaborn = "^0.12.0"
+jupyter = "^1.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

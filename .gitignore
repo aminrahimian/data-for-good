@@ -128,3 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 sentiment_analysis/
+GoogleNews-vectors-negative300.bin.gz
+glove.6B.50d.txt

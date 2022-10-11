@@ -16,7 +16,7 @@ ________________________________________________________________________________
 
 ```{r, include = TRUE}
 # Read the data
-rawdata <- read.csv("G:/Summer/ANN/smoke/smoking.csv")
+rawdata <- read.csv("smoking.csv")
 # Eliminate the missing data
 data <- na.omit(rawdata)
 ```
@@ -110,6 +110,63 @@ metrics_man
 
 metrics_woman <- network %>% evaluate(train_woman, train_woman_y, verbose=1)
 metrics_woman
+
+
+#Analysing how seperating data by other variables affects accuracy
+
+#Height Variable
+#Find the average height of all participants
+mean(data$height.cm.)
+
+#Splitting data into 2 groups
+#Create short participant data set
+short_x <- data %>%
+  filter(height.cm.<=175.26)
+
+train_short <- data.matrix(short_x[,c(2, 3, 4, 5, 6, 13, 15, 16, 17, 18, 20, 23)])
+train_short_y <- data.matrix(short_x[,27])
+
+#Creating tall participant data set
+tall_x <- data %>%
+  filter(height.cm.>175.26)
+
+train_tall <- data.matrix(tall_x[,c(2, 3, 4, 5, 6, 13, 15, 16, 17, 18, 20, 23)])
+train_tall_y <- data.matrix(tall_x[,27])
+
+#Display accuracy metrics
+metrics_short <- network %>% evaluate(train_short, train_short_y, verbose=1)
+metrics_short
+
+metrics_tall <- network %>% evaluate(train_tall, train_tall_y, verbose=1)
+metrics_tall
+
+
+#Fasting Blood Sugar Variable
+
+#Find the average fasting blood sugar of all the participants
+mean(data$fasting.blood.sugar)
+
+#Create the low fasting blood sugar data set
+lowbloodsugar_x <- data %>%
+  filter(fasting.blood.sugar<=99.31232)
+
+train_lowbloodsugar <- data.matrix(lowbloodsugar_x[,c(2, 3, 4, 5, 6, 13, 15, 16, 17, 18, 20, 23)])
+train_lowbloodsugar_y <- data.matrix(lowbloodsugar_x[,27])
+
+#Create the high fasting blood sugar data set
+highbloodsugar_x <- data %>%
+  filter(fasting.blood.sugar>99.31232)
+
+train_highbloodsugar <- data.matrix(highbloodsugar_x[,c(2, 3, 4, 5, 6, 13, 15, 16, 17, 18, 20, 23)])
+train_highbloodsugar_y <- data.matrix(highbloodsugar_x[,27])
+
+#Display accuracy metrics
+metrics_lowbloodsugar <- network %>% evaluate(train_lowbloodsugar, train_lowbloodsugar_y, verbose=1)
+metrics_lowbloodsugar
+
+metrics_highbloodsugar <- network %>% evaluate(train_highbloodsugar, train_highbloodsugar_y, verbose=1)
+metrics_highbloodsugar
+
 
 
 ```

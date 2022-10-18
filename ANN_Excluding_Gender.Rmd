@@ -1,0 +1,146 @@
+---
+title: "ANN"
+author: "Zhaohan Xing"
+date: '2022-04-18'
+output: html_document
+---
+
+
+\setcounter{section}{4}
+\setcounter{subsection}{0}
+\setcounter{subsubsection}{0}
+
+
+________________________________________________________________________________
+# Read Data
+
+```{r, include = TRUE}
+# Read the data
+rawdata <- read.csv("smoking.csv")
+# Eliminate the missing data
+data <- na.omit(rawdata)
+```
+
+
+```{r pressure, echo=FALSE}
+# Training and testing
+set.seed(6)
+idx <- sample(2, size = nrow(data), replace = TRUE, prob = c(0.7, 0.3))
+train_data <- data[idx == 1,]
+test_data <- data[idx == 2,]
+# Store the data
+write.csv(train_data, "train_data.csv", row.names = FALSE)
+write.csv(test_data, "test_data.csv", row.names = FALSE)
+
+```
+
+
+# ANN Methods
+
+```{r}
+library(dplyr)
+# Read train and test data
+train_data <- read.csv("train_data.csv")
+test_data <- read.csv("test_data.csv")
+
+
+
+# separate (with the variables that wants to be analyzed)
+train_x <- data.matrix(train_data[,c(3, 4, 5, 6, 13, 15, 16, 17, 18, 20, 23)])
+train_y <- data.matrix(train_data[,27])
+
+test_x <- data.matrix(test_data[,c(3, 4, 5, 6, 13, 15, 16, 17, 18, 20, 23)])
+test_y <- data.matrix(test_data[,27])
+
+
+# ANN
+set.seed(1234567)
+library(keras)
+# Note: we don't explicitly library(TensorFlow). Keras will take care of that.
+library(tidyverse)
+
+network <- keras_model_sequential() %>%
+  layer_dense(units = 11,
+              activation = "relu",
+              input_shape = 11) %>%
+  layer_dense(units = 15, activation = "relu") %>%
+  layer_dense(units = 15, activation = "relu") %>%
+  layer_dense(units = 1, activation = "sigmoid")
+
+network %>% compile(optimizer = "rmsprop",
+                    loss = "binary_crossentropy",
+                    metrics = c("accuracy")
+)
+
+history <- network %>% fit(train_x,
+                train_y,
+                epochs = 100,
+                batch_size = 128,
+                validation_data = list(test_x, test_y))
+
+plot(history)
+
+metrics <- network %>% evaluate(test_x, test_y, verbose=1)
+metrics
+
+prediction <- predict(network, test_x)
+
+
+
+
+```
+
+```{r}
+
+#Splitting data into 2 groups
+#Create short participant data set
+short_x <- data %>%
+  filter(height.cm.<=175.26)
+
+train_short <- data.matrix(short_x[,c(3, 4, 5, 6, 13, 15, 16, 17, 18, 20, 23)])
+train_short_y <- data.matrix(short_x[,27])
+
+#Creating tall participant data set
+tall_x <- data %>%
+  filter(height.cm.>175.26)
+
+train_tall <- data.matrix(tall_x[,c(3, 4, 5, 6, 13, 15, 16, 17, 18, 20, 23)])
+train_tall_y <- data.matrix(tall_x[,27])
+
+#Display accuracy metrics
+metrics_short <- network %>% evaluate(train_short, train_short_y, verbose=1)
+metrics_short
+
+metrics_tall <- network %>% evaluate(train_tall, train_tall_y, verbose=1)
+metrics_tall
+
+
+#Fasting Blood Sugar Variable
+
+#Find the average fasting blood sugar of all the participants
+mean(data$fasting.blood.sugar)
+
+#Create the low fasting blood sugar data set
+lowbloodsugar_x <- data %>%
+  filter(fasting.blood.sugar<=99.31232)
+
+train_lowbloodsugar <- data.matrix(lowbloodsugar_x[,c(3, 4, 5, 6, 13, 15, 16, 17, 18, 20, 23)])
+train_lowbloodsugar_y <- data.matrix(lowbloodsugar_x[,27])
+
+#Create the high fasting blood sugar data set
+highbloodsugar_x <- data %>%
+  filter(fasting.blood.sugar>99.31232)
+
+train_highbloodsugar <- data.matrix(highbloodsugar_x[,c(3, 4, 5, 6, 13, 15, 16, 17, 18, 20, 23)])
+train_highbloodsugar_y <- data.matrix(highbloodsugar_x[,27])
+
+#Display accuracy metrics
+metrics_lowbloodsugar <- network %>% evaluate(train_lowbloodsugar, train_lowbloodsugar_y, verbose=1)
+metrics_lowbloodsugar
+
+metrics_highbloodsugar <- network %>% evaluate(train_highbloodsugar, train_highbloodsugar_y, verbose=1)
+metrics_highbloodsugar
+
+
+
+```

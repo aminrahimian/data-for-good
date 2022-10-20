@@ -13,11 +13,13 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(readr)
 library(tidyr)
+
+library(leaps)
 ```
 
 
 ```{r pressure, echo=FALSE}
-loan_level_500k<- read_csv("data-for-good-main/loan_level_500k.csv")
+loan_level_500k <- read.csv("~/Documents/GitHub/data-for-good/loan_level_500k.csv")
 ```
 
 ```{r}
@@ -25,11 +27,12 @@ cols <- c('ORIGINAL_INTEREST_RATE', 'CREDIT_SCORE', 'FIRST_TIME_HOMEBUYER_FLAG',
 selected_df <- loan_level_500k[cols]
 selected_df <- selected_df %>% drop_na()
 loan_level_500k <- selected_df
-set.seed(8)
+
 ```
 
 ```{r}
 #Create a training and test set with an 70/30 split.
+set.seed(8)
 dt <- sort(sample(nrow(loan_level_500k), nrow(loan_level_500k)*.7))
 train <- loan_level_500k[dt,]
 test <- loan_level_500k[-dt,]
@@ -39,6 +42,35 @@ test <- loan_level_500k[-dt,]
 ```{r}
 lm.fit <- lm(train$ORIGINAL_INTEREST_RATE~., data = train)
 predict <- predict.lm(lm.fit, newdata= test)
+```
+
+Now we will try forward selection to find the best multiple linear regression model.
+```{r, warning = FALSE}
+#Fit Models with forward selection
+regfit.fwd <- regsubsets(train$ORIGINAL_INTEREST_RATE~ ., data = train, nvmax=7, method ="forward")
+summary(regfit.fwd)
+
+#Backwards Selection 
+regfit.bwd <- regsubsets (train$ORIGINAL_INTEREST_RATE~ ., data = train, nvmax=7, method = "backward")
+summary(regfit.bwd)
+
+test.mat <- model.matrix(test$ORIGINAL_INTEREST_RATE ~., data = test)
+regfit.fwd
+
+#Calculate MSE for each model size
+xval.errors <- rep (NA , 7)
+for (i in 1:7) {
+  coefi <- coef ( regfit.fwd , id = i)
+  pred <- test.mat[, names ( coefi )] %*% coefi
+  val.errors [i] <- mean (( test$ORIGINAL_INTEREST_RATE -pred ) ^2)
+}
+val.errors
+
+#Find the model with the smallest MSE
+
+MSE.Forward <- val.errors[which.min(val.errors)]
+MSE.Forward
+which.min(val.errors)
 ```
 
 

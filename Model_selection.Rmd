@@ -1,0 +1,47 @@
+---
+title: "Model Selection Tutorial"
+author: "Annie Goodwin and Erin O'Neill"
+date: "2022-11-15"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Import Packages
+```{r}
+library(readr)
+library(tidyr)
+```
+
+
+```{r pressure, echo=FALSE}
+loan_level_500k<- read_csv("data-for-good-main/loan_level_500k.csv")
+```
+
+```{r}
+cols <- c('ORIGINAL_INTEREST_RATE', 'CREDIT_SCORE', 'FIRST_TIME_HOMEBUYER_FLAG','ORIGINAL_DEBT_TO_INCOME_RATIO', 'NUMBER_OF_BORROWERS','POSTAL_CODE','LOAN_PURPOSE')
+selected_df <- loan_level_500k[cols]
+selected_df <- selected_df %>% drop_na()
+loan_level_500k <- selected_df
+set.seed(8)
+```
+
+```{r}
+#Create a training and test set with an 70/30 split.
+dt <- sort(sample(nrow(loan_level_500k), nrow(loan_level_500k)*.7))
+train <- loan_level_500k[dt,]
+test <- loan_level_500k[-dt,]
+```
+
+#Run Linear Regression With all predictors
+```{r}
+lm.fit <- lm(train$ORIGINAL_INTEREST_RATE~., data = train)
+predict <- predict.lm(lm.fit, newdata= test)
+```
+
+
+
+
+

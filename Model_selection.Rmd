@@ -13,13 +13,13 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(readr)
 library(tidyr)
-
+library(glmnet)
 library(leaps)
 ```
 
 
 ```{r pressure, echo=FALSE}
-loan_level_500k <- read.csv("~/Documents/GitHub/data-for-good/loan_level_500k.csv")
+loan_level_500k <- read.csv("loan_level_500k.csv")
 ```
 
 ```{r}
@@ -58,7 +58,7 @@ test.mat <- model.matrix(test$ORIGINAL_INTEREST_RATE ~., data = test)
 regfit.fwd
 
 #Calculate MSE for each model size
-xval.errors <- rep (NA , 7)
+val.errors <- rep (NA , 7)
 for (i in 1:7) {
   coefi <- coef ( regfit.fwd , id = i)
   pred <- test.mat[, names ( coefi )] %*% coefi
@@ -74,6 +74,33 @@ which.min(val.errors)
 ```
 
 
+Next we will run Ridge Regression
+```{r}
+#Format data and grid to prep for Ridge Regression
+x <- model.matrix(ORIGINAL_INTEREST_RATE~., loan_level_500k)[,-1]
+y <- loan_level_500k$ORIGINAL_INTEREST_RATE
+y.test <-y[-dt]
+grid <- 10^seq(10, -2, length = 100)
 
+#Fit the Model
+ridge.mod <- glmnet(x[-dt,], y[-dt], alpha = 0, lamda = grid, thresh = 1e-12)
+
+set.seed(30)
+
+#Use Cross validation to find best value of lambda
+cv.out <- cv.glmnet(x[dt,], y[dt], alpha = 0)
+plot(cv.out)
+bestlam <- cv.out$lambda.min
+bestlam
+
+#Fit predictions with best value of lambda
+ridge.pred <- predict(ridge.mod, s = bestlam, newx = x[-dt, ])
+
+#Calculate MSE
+MSE.ridge <- mean((ridge.pred - y.test)^2)
+MSE.ridge
+
+```
+The best value for Lambda is .0114114 and yeilds an MSE of .3124863.
 
 

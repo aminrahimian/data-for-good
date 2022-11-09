@@ -200,3 +200,15 @@ MSE.LASSO
 The best lambda value of .0002698215 returns and MSE of .3131287.
  
 The MSE of our models are all rather similar, however you can see that Ridge regression out performs Lasso which out performs forward selection.
+
+
+# Ethics
+## What are protected characteristics?
+https://www.youtube.com/watch?v=VXLtKlmtrvM&t=170s 
+
+## Are they really protected:
+No- but many people are trying to protect them.It can hard to prove discrimination.Humans are biased and therefore the models and programs they make and the data used to train models are biased.
+
+
+### Examples in Data Science
+* Amazon's hiring process discriminating against women

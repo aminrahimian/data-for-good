@@ -10,14 +10,16 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-Model Selection and Regulation:
+# Model Selection and Regulation:
 
-Background reading:
-Intro to Statistical Learning: 6
+## Background reading:
+### Intro to Statistical Learning: 
+6.1 and 6.2
 
-Ethical Algorithm:
+### Ethical Algorithm:
+Chapter 2
 
-Dataset:
+## Dataset:
 Dataset on Kaggle: https://www.kaggle.com/datasets/saravananselvamohan/freddie-mac-singlefamily-loanlevel-dataset
 
 Freddie Mac Single Family Loan-Level Dataset: https://www.freddiemac.com/research/datasets/sf-loanlevel-dataset
@@ -43,44 +45,47 @@ Number of Borrowers
 Original Interest Rate - this is what we want to predict
 This is a case of prediction because we want to predict a buyer’s mortgage interest rate (outcome) based on application information (predictors)
 
-Essence of Data:
+# Essence of Data:
 
-Why might you want to use model selection:
-It can be easy to overfit a model if not using model selection. Using model Selection can help you create a model that best balances the bias variance trade off.
+## Why might you want to use model selection:
+It can be easy to over fit a model if not using model selection. Using model Selection can help you create a model that best balances the bias variance trade off.
 
-HOw to compare different models?
-THere are many different model selection criteron that can be used to compare models. AIC, BIC, Mallow's CP, adjusted $$R^2$$ and other selection criterion that penalize more complex models used to be the best way to compare models. However, with increase of computing process, validation and cross validation have become a more accurate and still accessible way of comparing models. With new computational power, we can now calculate MSE of a test set as well as use cross validtion and MSE to work with parameter tuning in certain models.
+## HOw to compare different models?
+There are many different model selection criterion that can be used to compare models. AIC, BIC, Mallow's CP, adjusted $R^2$ and other selection criterion that penalize more complex models used to be the best way to compare models. However, with increase of computing process, validation and cross validation have become a more accurate and still accessible way of comparing models. With new computational power, we can now calculate MSE of a test set as well as use cross validation and MSE to work with parameter tuning in certain models.
 
 
-Forward vs backwards selection
-Forward selection:
+## Forward vs backwards selection
+### Forward selection:
 Begins with a model that contains no variables (called the Null Model)
 Begin adding the most significant variables one after the other
 Variable significance can be calculated using a statistical significance test such as an f-test or t-test. The most significant variable will have the lowest p-value.
 Continue to add significant variables until a pre-specified stopping rule is reached or until all the variables under consideration are included in the model
 The pre-specified stopping rule could include a specific test of model prediction accuracy or a certain error level (such as MSE or MAE)
-Backwards selection:
+### Backwards selection:
 Begins with a model that contains all variables under consideration (called the Full Model)
 Then starts removing the least significant variables one after the other.
 Variable significance can be calculated using a statistical significance test such as an f-test or t-test. The least significant variable will have the highest p-value.
 Until a pre-specified stopping rule is reached or until no variable is left in the model.
-Factor Levels
-Factor levels- a factor is a qualitative attribute variable. The number of levels is the number of possible values that the factor can have.
 
 
-Lasso and Ridge Regression:
 
-Ridge Regression:
-Ridge regression is similar to linear regression however it adds a penalty term ($$\lambda*slope^2$$). This penalty introduces a small amount of bias on how the regression line fits the data and in turn lessens the variance. Ridge regression minimizes $$SSR + \lambda *slope^2$$. The severity of the penalty is determined by the non-negative value of $$lambda$$.You can use cross validation to select the best value of $$lambda$$ for your model. The larger we make $$lambda$$, the slope will get closer and closer to zero, making the prediction less and less sensitive to our predictor variables. 
+# Lasso and Ridge Regression:
+
+## Ridge Regression:
+Ridge regression is similar to linear regression however it adds a penalty term ($\lambda*slope^2$). This penalty introduces a small amount of bias on how the regression line fits the data and in turn lessens the variance. Ridge regression minimizes $SSR + \lambda *slope^2$. The severity of the penalty is determined by the non-negative value of $lambda$.You can use cross validation to select the best value of $lambda$ for your model. The larger we make $lambda$, the slope will get closer and closer to zero, making the prediction less and less sensitive to our predictor variables. 
 
 Ridge regression can also be applied with categorical predictors and/or with logistic regression. The same penalty term and general concepts apply with these other forms of ridge regression.
 
 With least squares, you need at least p data points to estimate a model with p parameters, however, one benefit of ridge regression is that the penalty term allows us to find a solution with cross validation when the sample size is less than the penalty.
 
-Lasso Regression:
-Lasso regression is very similar to ridge regression, but instead of being penalized by $$\lambda * slope^2$$, the model is penalized by $$|\lambda|$$. Lasso regression also increases bias in hopes of decreasing variance. Ridge and Lasso regression might shrink different parameters by different amounts. Ridge regression can only shrink the slope of the model close to zero, while Lasso can shrink the parameters all the way to zero. This means that Lasso regression can remove useless parameters.
+## Lasso Regression:
+LASSO stands for Least Absolute Shrinkage and Selection Operator. This regression analysis method is useful for prediction accuracy and interpretability of statistical models. The model uses shrinkage which is where data values are shrunk towards a central point as the mean, thus encouraging simple and sparse models.
+
+Lasso regression is very similar to ridge regression, but instead of being penalized by $\lambda * slope^2$, the model is penalized by $|\lambda|$. Lasso regression also increases bias in hopes of decreasing variance. Ridge and Lasso regression might shrink different parameters by different amounts. Ridge regression can only shrink the slope of the model close to zero, while Lasso can shrink the parameters all the way to zero. This means that Lasso regression can remove useless parameters.
 
 Ridge regression tends to do a little better when all of the variables are useful, while Lasso does well with models that have some useless variables.
+
+Now, let's run some code:
 ## Import Packages
 ```{r}
 library(readr)
@@ -173,6 +178,25 @@ MSE.ridge <- mean((ridge.pred - y.test)^2)
 MSE.ridge
 
 ```
-The best value for Lambda is .0114114 and yeilds an MSE of .3124863.
+The best value for Lambda is .0114114 and yields an MSE of .3124863.
 
+```{r}
+#LASSO Regression
+set.seed(80)
+lasso.mod <- glmnet(x[-dt, ], y[-dt], alpha=1, lambda = grid)
 
+plot(lasso.mod)
+
+set.seed(1)
+cv.out <- cv.glmnet(x[dt, ], y[dt], alpha=1)
+plot(cv.out)
+bestlam <-cv.out$lambda.min
+bestlam
+lasso.pred <- predict(lasso.mod, s = bestlam, newx =x[-dt, ])
+
+MSE.LASSO <- mean((lasso.pred -y.test)^2)
+MSE.LASSO
+```
+The best lambda value of .0002698215 returns and MSE of .3131287.
+ 
+The MSE of our models are all rather similar, however you can see that Ridge regression out performs Lasso which out performs forward selection.

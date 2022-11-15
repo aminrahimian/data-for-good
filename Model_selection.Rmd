@@ -227,3 +227,8 @@ Maybe? Many people are trying to protect them. It can hard to prove discriminati
 
 Source/further reading: https://towardsdatascience.com/real-life-examples-of-discriminating-artificial-intelligence-cae395a90070 
 
+### Another Example
+related article: https://arxiv.org/pdf/2110.14755v1.pdf
+
+Discusses Machine Learning identifying race as a short cut when trying to gleam medical information off of a chest x-ray. This contrasts with human identifiers who are unable to (or at least not trained to) look for racial identifiers when looking at chest x-rays. This is an example of how algorithms, specifically black box algorithms, could potentially be using protected characteristics in decisions even when these protected characteristics are not directly identified in the data set. 
+

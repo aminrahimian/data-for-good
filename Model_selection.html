@@ -1957,14 +1957,55 @@ selection.</p>
 </div>
 <div id="are-they-really-protected" class="section level2">
 <h2>Are they really protected:</h2>
-<p>No- but many people are trying to protect them.It can hard to prove
-discrimination.Humans are biased and therefore the models and programs
+<p>Maybe? Many people are trying to protect them. It can hard to prove
+discrimination. Humans are biased and therefore the models and programs
 they make and the data used to train models are biased.</p>
 <div id="examples-in-data-science" class="section level3">
 <h3>Examples in Data Science</h3>
-<ul>
-<li>Amazon’s hiring process discriminating against women</li>
-</ul>
+<ol style="list-style-type: decimal">
+<li><p>In October 2019, researchers found that an algorithm used on more
+than 200 million people in US hospitals to predict which patients would
+likely need extra medical care heavily favored white patients over black
+patients. While race itself wasn’t a variable used in this algorithm,
+another variable highly correlated to race was, which was healthcare
+cost history. The rationale was that cost summarizes how many healthcare
+needs a particular person has. For various reasons, black patients
+incurred lower health-care costs than white patients with the same
+conditions on average. Thankfully, researchers worked with Optum to
+reduce the level of bias by 80%. But had they not interrogated in the
+first place, AI bias would have continued to discriminate
+severely.</p></li>
+<li><p>Arguably the most notable example of AI bias is the COMPAS
+(Correctional Offender Management Profiling for Alternative Sanctions)
+algorithm used in US court systems to predict the likelihood that a
+defendant would become a recidivist.</p></li>
+</ol>
+<p>Due to the data that was used, the model that was chosen, and the
+process of creating the algorithm overall, the model predicted twice as
+many false positives for recidivism for black offenders (45%) than white
+offenders (23%).</p>
+<ol start="3" style="list-style-type: decimal">
+<li>Amazon’s one of the largest tech giants in the world. And so, it’s
+no surprise that they’re heavy users of machine learning and artificial
+intelligence. In 2015, Amazon realized that their algorithm used for
+hiring employees was found to be biased against women. The reason for
+that was because the algorithm was based on the number of resumes
+submitted over the past ten years, and since most of the applicants were
+men, it was trained to favor men over women.</li>
+</ol>
+</div>
+<div id="ways-forward" class="section level3">
+<h3>Ways Forward:</h3>
+<ol style="list-style-type: decimal">
+<li><p>Try to have models reflect how decisions should be made, not how
+they have been made historically. We don’t want to perpetuate past
+biases.</p></li>
+<li><p>Check prediction accuracy (false negatives, false positive rate,
+etc.) across social groups to catch models that might be
+discriminatory.</p></li>
+<li><p>Consider ways of enforcing data governance and fairness.</p></li>
+</ol>
+<p>Source/further reading: <a href="https://towardsdatascience.com/real-life-examples-of-discriminating-artificial-intelligence-cae395a90070" class="uri">https://towardsdatascience.com/real-life-examples-of-discriminating-artificial-intelligence-cae395a90070</a></p>
 </div>
 </div>
 </div>

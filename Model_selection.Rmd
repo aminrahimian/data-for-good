@@ -50,7 +50,7 @@ This is a case of prediction because we want to predict a buyer’s mortgage int
 ## Why might you want to use model selection:
 It can be easy to over fit a model if not using model selection. Using model Selection can help you create a model that best balances the bias variance trade off.
 
-## HOw to compare different models?
+## How to compare different models?
 There are many different model selection criterion that can be used to compare models. AIC, BIC, Mallow's CP, adjusted $R^2$ and other selection criterion that penalize more complex models used to be the best way to compare models. However, with increase of computing process, validation and cross validation have become a more accurate and still accessible way of comparing models. With new computational power, we can now calculate MSE of a test set as well as use cross validation and MSE to work with parameter tuning in certain models.
 
 
@@ -61,6 +61,7 @@ Begin adding the most significant variables one after the other
 Variable significance can be calculated using a statistical significance test such as an f-test or t-test. The most significant variable will have the lowest p-value.
 Continue to add significant variables until a pre-specified stopping rule is reached or until all the variables under consideration are included in the model
 The pre-specified stopping rule could include a specific test of model prediction accuracy or a certain error level (such as MSE or MAE)
+
 ### Backwards selection:
 Begins with a model that contains all variables under consideration (called the Full Model)
 Then starts removing the least significant variables one after the other.
@@ -86,7 +87,7 @@ Lasso regression is very similar to ridge regression, but instead of being penal
 Ridge regression tends to do a little better when all of the variables are useful, while Lasso does well with models that have some useless variables.
 
 Now, let's run some code:
-## Import Packages
+Import Packages
 ```{r}
 library(readr)
 library(tidyr)
@@ -115,7 +116,7 @@ train <- loan_level_500k[dt,]
 test <- loan_level_500k[-dt,]
 ```
 
-#Run Linear Regression With all predictors
+Run Linear Regression With all predictors
 ```{r}
 lm.fit <- lm(train$ORIGINAL_INTEREST_RATE~., data = train)
 predict <- predict.lm(lm.fit, newdata= test)
@@ -184,8 +185,6 @@ The best value for Lambda is .0114114 and yields an MSE of .3124863.
 #LASSO Regression
 set.seed(80)
 lasso.mod <- glmnet(x[-dt, ], y[-dt], alpha=1, lambda = grid)
-
-plot(lasso.mod)
 
 set.seed(1)
 cv.out <- cv.glmnet(x[dt, ], y[dt], alpha=1)

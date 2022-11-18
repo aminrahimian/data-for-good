@@ -161,6 +161,7 @@ y.test <-y[-dt]
 grid <- 10^seq(10, -2, length = 100)
 
 #Fit the Model
+#Note that by default, the glmnet() function standardizes the variables so that they are on the same scale
 ridge.mod <- glmnet(x[-dt,], y[-dt], alpha = 0, lamda = grid, thresh = 1e-12)
 
 set.seed(30)
@@ -184,6 +185,7 @@ The best value for Lambda is .0114114 and yields an MSE of .3124863.
 ```{r}
 #LASSO Regression
 set.seed(80)
+#Note that by default, the glmnet() function standardizes the variables so that they are on the same scale
 lasso.mod <- glmnet(x[-dt, ], y[-dt], alpha=1, lambda = grid)
 
 set.seed(1)

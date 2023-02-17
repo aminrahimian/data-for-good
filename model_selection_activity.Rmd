@@ -58,7 +58,11 @@ lm.fit4 <- lm(ORIGINAL_INTEREST_RATE~ CREDIT_SCORE + data$FIRST_TIME_HOMEBUYER_F
 
 
 ```{r}
-AIC(lm.fit)
+summary(lm.fit)$r.squared
+summary(lm.fit2)$r.squared
+summary(lm.fit3)$r.squared
+summary(lm.fit4)$r.squared
+
 AIC(lm.fit2)
 AIC(lm.fit3)
 

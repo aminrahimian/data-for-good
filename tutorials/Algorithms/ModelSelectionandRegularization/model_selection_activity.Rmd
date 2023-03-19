@@ -1,0 +1,72 @@
+---
+title: "Model_Selection_Activity"
+author: "Annie Goodwin, Erin O'Neill"
+date: "2022-11-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
+title: "Model Selection Activity"
+author: "Annie Goodwin, Erin O'Neill"
+date: "2022-11-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Below we have imported some data and added some NOISE/New Parameters to the data set. We then ran 4 linear models. Each group will be assigned either AIC, BIC, or R-squared (note: not adjusted R^2) and report back their selection criterion for each model. We will then share and discuss. If you need help writing the code for your selection criterion just ask, but it might be easier than you are expecting.
+## Import Packages
+```{r}
+library(readr)
+library(tidyr)
+```
+
+
+```{r pressure, echo=FALSE}
+loan_level_500k <- read.csv("loan_level_500k.csv")
+```
+
+```{r}
+cols <- c('ORIGINAL_INTEREST_RATE', 'CREDIT_SCORE', 'FIRST_TIME_HOMEBUYER_FLAG','ORIGINAL_DEBT_TO_INCOME_RATIO', 'NUMBER_OF_BORROWERS','POSTAL_CODE','LOAN_PURPOSE')
+selected_df <- loan_level_500k[cols]
+selected_df <- selected_df %>% drop_na()
+set.seed(13)
+selected_df$NOISE <- selected_df$ORIGINAL_INTEREST_RATE * rnorm(482451, 0, 1)
+selected_df$NOISE2 <- selected_df$CREDIT_SCORE * rnorm(482451, 21, 5)
+selected_df$NOISE3 <- selected_df$POSTAL_CODE * rnorm(482451, 7, 5)
+selected_df$NOISE4 <- selected_df$ORIGINAL_INTEREST_RATE * rnorm(482451, 0, 83)
+selected_df$NOISE5 <- selected_df$CREDIT_SCORE * rnorm(482451, 21, 5)
+selected_df$NOISE6 <- selected_df$POSTAL_CODE * rnorm(482451, 7, 5)
+selected_df$NOISE7 <- selected_df$ORIGINAL_INTEREST_RATE * rnorm(482451, -5, 1)
+selected_df$NOISE8 <- selected_df$POSTAL_CODE * rnorm(482451, 71, 150)
+selected_df$NOISE9 <- selected_df$ORIGINAL_INTEREST_RATE * rnorm(482451, -.000002, 1000000000)
+data <- selected_df
+```
+
+```{r}
+lm.fit <- lm(ORIGINAL_INTEREST_RATE~., data = data)
+lm.fit2 <- lm(ORIGINAL_INTEREST_RATE~ CREDIT_SCORE + data$FIRST_TIME_HOMEBUYER_FLAG + ORIGINAL_DEBT_TO_INCOME_RATIO + data$NUMBER_OF_BORROWERS + data$POSTAL_CODE + data$LOAN_PURPOSE  + data$NOISE + NOISE2 + NOISE3 + NOISE4 + NOISE5 + NOISE6 + NOISE7 +NOISE8, data = data)
+lm.fit3 <- lm(ORIGINAL_INTEREST_RATE~ CREDIT_SCORE + data$FIRST_TIME_HOMEBUYER_FLAG + ORIGINAL_DEBT_TO_INCOME_RATIO + data$NUMBER_OF_BORROWERS + data$LOAN_PURPOSE  + data$NOISE + NOISE2 + NOISE3 + NOISE4 + NOISE5 + NOISE6 + NOISE7 +NOISE8, data = data)
+lm.fit4 <- lm(ORIGINAL_INTEREST_RATE~ CREDIT_SCORE + data$FIRST_TIME_HOMEBUYER_FLAG + ORIGINAL_DEBT_TO_INCOME_RATIO + data$NUMBER_OF_BORROWERS + data$LOAN_PURPOSE  + data$NOISE + NOISE2 + NOISE3 + NOISE4 + NOISE5 + NOISE6 + NOISE7, data = data)
+```
+
+
+```{r}
+summary(lm.fit)$r.squared
+summary(lm.fit2)$r.squared
+summary(lm.fit3)$r.squared
+summary(lm.fit4)$r.squared
+
+AIC(lm.fit2)
+AIC(lm.fit3)
+
+AIC(lm.fit4)
+```
+
+

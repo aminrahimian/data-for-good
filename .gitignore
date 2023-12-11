@@ -130,3 +130,4 @@ dmypy.json
 sentiment_analysis/
 GoogleNews-vectors-negative300.bin.gz
 glove.6B.50d.txt
+POGOH Data Analysis and City Bike Friendliness.ipynb

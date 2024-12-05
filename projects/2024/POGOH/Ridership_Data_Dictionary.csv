@@ -1,0 +1,11 @@
+field_name,description
+route,"""Friendly"" route code that joins with PAAC geospatial data."
+ridership_route_code,Route code for joining with ridership data.
+route_full_name,Full route name as it would appear on the headsign of the bus/light rail vehicle.
+current_garage,The garage that the bus route operates out of. Route 64 alternates between East Liberty and West Mifflin garage; its total ridership is averaged in this dataset.
+mode,"Transit mode: bus, light rail (the T), or incline."
+month_start,The first day of the month in YYYY-MM-DD format.
+year_month,The year-month key in YYYYMM format.
+day_type,"Weekday, Saturday, or Sunday/Holiday service. PAAC routes and schedules vary based on the service day. PAAC provides Sunday service on the following holidays: New Years Day, Memorial Day, Fourth of July, Labor Day, Thanksgiving, and Christmas."
+avg_riders,"The average daily riders for that month, day type, and route."
+day_count,The number of days for each day_type in the month. Certain holidays are considered Sundays. Riders can be multiplied by day_count to estimate the monthly total riders.

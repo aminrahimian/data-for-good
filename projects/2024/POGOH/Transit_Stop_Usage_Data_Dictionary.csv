@@ -1,0 +1,25 @@
+STOP_ID,Internal alphanumeric stop ID.
+ROUTE,Individual route that serves this stop.
+STOP_ROUTE,Combination of stop ID and route.
+STOP_NAME,Text name for the stop.
+CLEVER_ID,Numeric ID for the stop; this ID is printed on some bus stop signs.
+LATITUDE,Stop latitude.
+LONGITUDE,Stop longitude
+ALL_ROUTES,List of all routes that serve this stop (may change over time).
+SHELTER,"If the stop has a shelter, lists the owner (e.g. Envision Downtown)."
+STOP_TYPE,"Bus, busway, light rail, or incline."
+CURRENT_STOP,Is the stop currently in use.
+FY19_AVG_ON,Average boardings for fiscal year 2019 (2018-07-01 to 2019-06-30).
+FY19_AVG_OFF,Average alightings for fiscal year 2019 (2018-07-01 to 2019-06-30).
+FY19_AVG_TOTAL,Average boardings and alightings for fiscal year 2019 (2018-07-01 to 2019-06-30).
+FY19_RANK,Ranks each stop-route combination from most to least used.
+1806_ON,Boardings for the 1806 schedule pick for FY2019: 7/1/2018 to 9/1/2018.
+1806_OFF,Alightings for the 1806 schedule pick.
+1809_ON,Boardings for the 1809 schedule pick: 9/2/2018 to 11/17/2018.
+1809_OFF,Alightings for the 1809 schedule pick.
+1811_ON,Boardings for the 1811 schedule pick: 11/18/2018 to 3/16/2019.
+1811_OFF,Alightings for the 1811 schedule pick.
+1903_ON,Boardings for the 1903 schedule pick: 3/17/2019 to 6/15/2019.
+1903_OFF,Alightings for the 1903 schedule pick.
+1906_ON,Boardings for the 1906 schedule pick for FY2019: 6/16/2019 to 6/30/2019.
+1906_OFF,Alightings for the 1906 schedule pick.
